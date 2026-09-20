@@ -31,7 +31,7 @@ for i,line in enumerate(proglist):
         nextlinenum = linenumlist[i+1]
     textbox1.insert(INSERT,"\n")
     textbox1.insert(INSERT,"def line_"+linenum+"(state)\n")
-    textbox1.insert(INSERT,"    print('"+line+"')\n")
+    textbox1.insert(INSERT,"    print('"+line[0:len(line)-2]+"')\n")
     textbox1.insert(INSERT,'return "'+nextlinenum+'"\n')
     textbox1.insert(INSERT,"\n")
 
@@ -46,5 +46,14 @@ textbox1.insert(INSERT,'state = {"B": 0}\n')
 textbox1.insert(INSERT,'line = "'+linenumlist[0]+'"\n')
 textbox1.insert(INSERT,'while line:\n')
 textbox1.insert(INSERT,'    line = program[line](state)')
+
+
+def copyall():
+    selectedtext = textbox1.get("1.0","end-1c")
+    mainwin.clipboard_clear()
+    mainwin.clipboard_append(selectedtext)
+
+btnCopy = Button(mainwin,text = "Copy All", command = copyall)
+btnCopy.place(x=10,y=700)    
 
 mainwin.mainloop()
