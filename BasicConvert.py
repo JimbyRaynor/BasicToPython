@@ -29,10 +29,15 @@ for i,line in enumerate(proglist):
     line = proglist[i]
     if i < len(proglist)-1:
         nextlinenum = linenumlist[i+1]
+    else:
+        nextlinenum = ""
     textbox1.insert(INSERT,"\n")
-    textbox1.insert(INSERT,"def line_"+linenum+"(state)\n")
-    textbox1.insert(INSERT,"    print('"+line[0:len(line)-2]+"')\n")
-    textbox1.insert(INSERT,'return "'+nextlinenum+'"\n')
+    textbox1.insert(INSERT,"def line_"+linenum+"(state):\n")
+    endofline = len(line)-1
+    #if line.find("\n") > 0:
+      #  endofline = endofline-1
+    textbox1.insert(INSERT,"    print('"+line[0:endofline]+"')\n")
+    textbox1.insert(INSERT,'    return "'+nextlinenum+'"\n')
     textbox1.insert(INSERT,"\n")
 
 textbox1.insert(INSERT,"program = {")
