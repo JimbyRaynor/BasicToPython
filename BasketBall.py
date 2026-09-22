@@ -1,4 +1,6 @@
 
+# 101 Basic Games by David Ahl is public domain and can be viewed on Internet Archive legally
+
 import random
 
 loopstack = [] # for FOR loops, including nested for loops (just push/pop from same stack)
@@ -6,6 +8,15 @@ callstack = [] # for GOSUB/RETURN
 
 state = {"dummy": 0} # real variable dictionary
 stringstate = {"dummy": "dummystring"} # string variable dictionary
+
+# S[1] is darmouth score. # S[0] is opponent score
+S = [0,0]
+
+D = 0 # defense
+OD = "" # opponents name
+Z = 0 # shot type
+P = 0 # current player P=0,1
+T = 0 # turn number ??
 
 def basicGOSUB(returnline, targetline):
     callstack.append(returnline)
@@ -67,9 +78,9 @@ def line_72(state):
 
 
 def line_76(state):
+    global D
     print('76 INPUT "YOUR STARTING DEFENSE WILL BE";D:IF D<6 THEN 2010')
-    D=input("starting defense: ")
-    state["D"] = D
+    D=int(input("starting defense: "))
     if int(D) < 6:
         return "2010"
     return "79"
@@ -81,8 +92,9 @@ def line_79(state):
 
 
 def line_80(state):
+    global OD
     print('80 INPUT "CHOOSE YOUR OPPONENT";O$')
-    stringstate["O"] = input("choose your opponent: ")
+    OD = input("choose your opponent: ")
     return "370"
 
 
@@ -101,7 +113,7 @@ def line_390(state):
 
 def line_400(state):
     print('400 PRINT O$;" CONTROLS THE TAP."')
-    print(stringstate["O"]+ " controls the tap")
+    print(OD+ " controls the tap")
     return "410"
 
 def line_410(state):
@@ -122,44 +134,58 @@ def line_425(state):
 
 
 def line_430(state):
+    global Z
     print('430 INPUT "YOUR SHOT";Z')
-    state["Z"] = int(input("your shot: "))
+    Z = int(input("your shot: "))
     return "440"
 
 
 def line_440(state):
+    global P
     print('440 P=0')
-    state["P"] = 0
+    P = 0  # this means Darmouth's turn ???
     return "445"
 
 
 def line_445(state):
+    global Z
     print('445 IF Z<>INT(Z) THEN 455')
+    if Z != int(Z):
+        return "455"
     return "446"
 
 
 def line_446(state):
+    global Z
     print('446 IF Z<0 OR Z>4 THEN 455')
+    if Z < 0 or Z > 4:
+            return "455"
     return "447"
 
 
 def line_447(state):
     print('447 GOTO 460')
-    return "455"
+    return "460"
 
 
 def line_455(state):
     print('455 PRINT "INCORRECT ANSWER.  RETYPE IT. ";:GOTO 430')
-    return "460"
+    print("incorrect answer. retype it.")
+    return "430"
 
 
 def line_460(state):
     print('460 IF RND(1)<.5 THEN 1000')
+    if random.random() < 0.5:
+        return "1000"
     return "480"
 
 
 def line_480(state):
+    global T
     print('480 IF T<100 THEN 1000')
+    if T < 100:
+        return "1000"
     return "490"
 
 
@@ -169,27 +195,33 @@ def line_490(state):
 
 
 def line_491(state):
-    print('491 IF S(1)<>S(0) THEN 510')
+    print('491 IF S(1)<>S(0) THEN 510') # S[1] is darmouth score. # S[0] is opponent score
+    if S[1] != S[0]:
+        return "510"
     return "492"
 
 
 def line_492(state):
     print('492 PRINT:PRINT "   ***** END OF SECOND HALF *****":PRINT')
+    print(" end of second half")
     return "493"
 
 
 def line_493(state):
     print('493 PRINT "SCORE AT END OF REGULATION TIME:"')
+    print("score at end of regulation time:")
     return "494"
 
 
 def line_494(state):
     print('494 PRINT "        DARTMOUTH:";S(1);"  ";O$;":";S(0)')
+    print("   Dartmouth:",S[1], "   ", OD, ":", S[0])
     return "495"
 
 
 def line_495(state):
     print('495 PRINT')
+    print()
     return "496"
 
 
