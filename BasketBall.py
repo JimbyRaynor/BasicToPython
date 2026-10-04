@@ -2,6 +2,7 @@
 # 101 Basic Games by David Ahl is public domain and can be viewed on Internet Archive legally
 
 import random
+import time
 
 loopstack = [] # for FOR loops, including nested for loops (just push/pop from same stack)
 callstack = [] # for GOSUB/RETURN
@@ -231,13 +232,15 @@ def line_496(state):
 
 
 def line_499(state):
+    global T
     print('499 T=93')
+    T = 93
     return "500"
 
 
 def line_500(state):
     print('500 GOTO 370')
-    return "510"
+    return "370"
 
 
 def line_510(state):
@@ -247,72 +250,82 @@ def line_510(state):
 
 def line_515(state):
     print('515 PRINT "FINAL SCORE: DARTMOUTH:";S(1);"  ";O$;":";S(0)')
+    print("final score : Dartmouth: ", S[1]," ", OD, ":",S[0])
     return "520"
 
 
 def line_520(state):
     print('520 STOP')
-    return "600"
+    return None
 
 
 def line_600(state):
     print('600 PRINT')
+    print()
     return "610"
 
 
 def line_610(state):
     print('610 PRINT "   *** TWO MINUTES LEFT IN THE GAME ***"')
+    print("** two minutes left in game **")
     return "620"
 
 
 def line_620(state):
     print('620 PRINT')
+    print()
     return "630"
 
 
 def line_630(state):
     print('630 RETURN')
-    basicRETURN()
-    return "1000"
+    return basicRETURN()
 
 
 def line_1000(state):
     print('1000 ON Z GOTO 1040,1040')
+    if Z==1: return "1040"
+    if Z==2: return "1040"
     return "1030"
 
 
 def line_1030(state):
     print('1030 GOTO 1300')
-    return "1040"
+    return "1300"
 
 
 def line_1040(state):
+    global T
     print('1040 T=T+1')
+    T = T + 1
     return "1041"
 
 
 def line_1041(state):
     print('1041 IF T=50 THEN 8000')
+    if T==50: return "8000"
     return "1042"
 
 
 def line_1042(state):
     print('1042 IF T=92 THEN 1046')
+    if T==92: return "1046"
     return "1043"
 
 
 def line_1043(state):
     print('1043 GOTO 1050')
-    return "1046"
+    return "1050"
 
 
 def line_1046(state):
     print('1046 GOSUB 600')
-    return "1050"
+    return basicGOSUB("1050","600") # return line, GOSUB line
 
 
 def line_1050(state):
     print('1050 PRINT "JUMP SHOT"')
+    print("jump shot")
     return "1060"
 
 
@@ -657,15 +670,16 @@ def line_1710(state):
 
 
 def line_2010(state):
+    global D
     print('2010 INPUT "YOUR NEW DEFENSIVE ALLIGNMENT IS";D')
-    D = input("YOUR NEW DEFENSIVE ALLIGNMENT IS: ")
-    state["D"] = D
+    D = int(input("YOUR NEW DEFENSIVE ALLIGNMENT IS: "))
     return "2030"
 
 
 def line_2030(state):
+    global D
     print('2030 IF D<6 THEN 2010')
-    if state["D"] < 6:
+    if D < 6:
        return "2010"
     return "2040"
 
@@ -677,19 +691,20 @@ def line_2040(state):
 
 def line_3000(state):
     print('3000 P=1')
-    state["P"] = 1
+    P = 1
     return "3005"
 
 
 def line_3005(state):
+    global T
     print('3005 T=T+1')
-    state["T"] = state["T"] + 1
+    T = T + 1
     return "3008"
 
 
 def line_3008(state):
     print('3008 IF T=50 THEN 8000')
-    if state["T"] == 50:
+    if T == 50:
        return "8000"
     return "3012"
 
@@ -701,8 +716,7 @@ def line_3012(state):
 
 def line_3015(state):
     print('3015 GOSUB 600') # two minutes left in game
-    basicGOSUB("3018","600") # return line, GOSUB line
-    return "3018"
+    return basicGOSUB("3018","600") # return line, GOSUB line
 
 
 def line_3018(state):
@@ -1250,3 +1264,4 @@ program = {"5": line_5,
 line = "5"
 while line:
     line = program[line](state)
+    time.sleep(0.2)
